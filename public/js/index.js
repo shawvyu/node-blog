@@ -40,4 +40,23 @@ $(function () {
             }
         })
     })
+
+    //登录
+    loginBox.find('button').on('click',function () {
+        //通过ajax提交数据
+        $.ajax({
+            type:'post',
+            url:'/api/user/login',
+            data:{
+                username:loginBox.find('[name="username"]').val(),
+                password:loginBox.find('[name="password"]').val(),
+            },
+            dataType:'json',
+            success:function (result) {
+                for(var a in result){
+                    alert(a);
+                };
+            }
+        })
+    });
 })
