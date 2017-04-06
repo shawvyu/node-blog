@@ -95,6 +95,14 @@ router.post('/user/login',function (req,res,next) {
         }else{
             //用户名和密码正确
             responseData.message='登录成功';
+            responseData.userInfo={
+                _id:userInfo._id,
+                username:userInfo.username
+            }
+            req.cookies.set('userInfo',JSON.stringify({
+                _id:userInfo._id,
+                username:userInfo.username
+            }));
             res.json(responseData);
             return;
         }
@@ -102,5 +110,12 @@ router.post('/user/login',function (req,res,next) {
 
 })
 
+//退出
+router.get('/user/logout',function (req,res) {
+    req.cookies.set('userInfo',null);
+    responseData.message='退出成功';
+    res.json(responseData);
+    return;
+})
 
 module.exports=router;

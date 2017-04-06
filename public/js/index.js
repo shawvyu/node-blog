@@ -4,6 +4,8 @@
 $(function () {
     var loginBox=$('#loginBox');
     var registerBox=$('#registerBox');
+    var userinfo=$('#userinfo');
+    var logout=$('#logout');
 
     //显示注册，隐藏登录
     loginBox.find('a').on('click',function () {
@@ -53,10 +55,31 @@ $(function () {
             },
             dataType:'json',
             success:function (result) {
-                for(var a in result){
-                    alert(a);
-                };
+                if (!result.code){
+                    //登录成功,刷新页面
+                    window.location.reload();
+                    // setTimeout(function () {
+                    //     userinfo.show();
+                    //     loginBox.hide();
+                    //     //显示登录用户的信息
+                    //     userinfo.find('.username').html(result.userInfo.username);
+                    //     userinfo.find('.info').html('你好，欢迎光临我的博客！');
+                    // },1000)
+                }
             }
         })
     });
+
+    //退出
+    logout.on('click',function () {
+        $.ajax({
+            url:'api/user/logout',
+            success:function (result) {
+                if(!result.code){
+                    //退出成功
+                    window.location.reload();
+                }
+            }
+        })
+    })
 })

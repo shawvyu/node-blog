@@ -154,14 +154,16 @@
 					</nav>
             	</main>
                 <aside class="col-md-4 sidebar">
-					<!--<div class="widget">-->
-						<!--<h4 class="title">用户信息</h4>-->
-						<!--<div class="content community">-->
-							<!--<p>QQ群：277327792</p>-->
-							<!--<p><a href="" target="_blank"><i class="fa fa-comments"></i> 问答社区</a></p>-->
-							<!--<p><a href=""  target="_blank"><i class="fa fa-weibo"></i> 官方微博</a></p>-->
-						<!--</div>-->
-					<!--</div>-->
+                    {% if userInfo._id %}
+					<div class="widget" id="userinfo" >
+						<h4 class="title">用户信息</h4>
+						<div class="content community">
+							<p class=" username">{{ userInfo.username }}</p>
+							<p class="info" style="color: red">你好，欢迎光临我的博客！</p>
+							<p ><a href="javascript:;" id="logout" style="color:#2e6da4">退出</a></p>
+						</div>
+					</div>
+                    {% else %}
 					<div class="widget" id="loginBox">
 						<h4 class="title">登录</h4>
 						  <div class="form-group">
@@ -200,6 +202,7 @@
                         <p ></p>
                         <p class="text-right message"></p>
 					</div>
+                    {% endif %}
 					<div class="widget">
 						<h4 class="title">社区</h4>
 						<p class="text-left">已有帐号</p>
