@@ -19,6 +19,8 @@ var bodyParser=require('body-parser');
 var Cookies=require('cookies');
 
 
+var User=require('./models/user');
+
 //bodyparser 设置
 app.use(bodyParser.urlencoded({extended:true}))
 //设置cookies
@@ -28,12 +30,20 @@ app.use(function (req,res,next) {
     req.userInfo={};
     if (req.cookies.get('userInfo')){
         try {
-         req.userInfo=JSON.parse(req.cookies.get('userInfo'));
-        }catch (err) {
+             req.userInfo=JSON.parse(req.cookies.get('userInfo'));
 
+            //获取当前登录用户的类型，是否是管理员
+            User.findById(req.userInfo._id).then(function (userInfo) {
+                req.userInfo.isAdmin=Boolean(userInfo.isAdmin);
+                next();
+            })
+        }catch (err) {
+            next();
         }
+    }else{
+        next();
     }
-    next();
+
 })
 
 

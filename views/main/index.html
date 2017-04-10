@@ -159,7 +159,12 @@
 						<h4 class="title">用户信息</h4>
 						<div class="content community">
 							<p class=" username">{{ userInfo.username }}</p>
-							<p class="info" style="color: red">你好，欢迎光临我的博客！</p>
+                            {% if userInfo.isAdmin %}
+                            <p class="info" style="color: red">你好，管理员<a href="/admin" style="margin-left: 10px;">进入管理</a></p>
+                            {% else %}
+                            <p class="info" style="color: red">你好，欢迎光临我的博客！</p>
+                            {% endif %}
+
 							<p ><a href="javascript:;" id="logout" style="color:#2e6da4">退出</a></p>
 						</div>
 					</div>
