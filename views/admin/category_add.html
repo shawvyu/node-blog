@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+{% block main%}
+<ol class="breadcrumb">
+    <li><a href="/admin">管理首页</a></li>
+    <li><span>分类添加</span></li>
+</ol>
+<form class="form-horizontal" method="post">
+    <div class="form-group">
+        <label for="inputEmail3" class="col-sm-1 control-label">请输入分类名称</label>
+        <div class="col-sm-11">
+            <input type="email" class="form-control" id="inputEmail3" placeholder="">
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-sm-offset-1 col-sm-11">
+            <button type="submit" class="btn btn-default">添加</button>
+        </div>
+    </div>
+</form>
+
+{% endblock %}
