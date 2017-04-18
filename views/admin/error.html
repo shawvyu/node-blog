@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+{% block main%}
+<ol class="breadcrumb">
+    <li><a href="/admin">管理首页</a></li>
+    <li><span>分类提示</span></li>
+</ol>
+<div class="alert alert-danger" role="alert">错误提示   {{message}} </div>
+{% if url %}
+<div class="alert alert-info" role="alert"><a href="{{url}}">点击跳转</a></div>
+{% else %}
+<div class="alert alert-info" role="alert"><a href="javascript:;window.history.back()">返回上一步</a></div>
+{% endif %}
+
+
+
+{% endblock %}
