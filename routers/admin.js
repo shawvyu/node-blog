@@ -5,6 +5,8 @@ var express=require('express');
 var router=express.Router();
 var User=require('../models/user');
 var Category=require('../models/category');
+var Content=require('../models/content');
+
 
 router.use(function (req,res,next) {
     if (!req.userInfo.isAdmin){
@@ -87,7 +89,13 @@ router.get('/category',function (req,res) {
         //取值不小于1
         page=Math.max(page,1)
         var skip=(page-1)*limit;
-        Category.find().limit(limit).skip(skip).then(function (categories) {
+
+        /**
+         * 1:升序
+         * -1:降序
+         * _id里面包含了一个创建的时间戳，所有越后面越大，我们要让后面的排在前面，就要采用降序排列
+         * */
+        Category.find().sort({_id:-1}).limit(limit).skip(skip).then(function (categories) {
             res.render('admin/category_index',{
                 userInfo:req.userInfo,
                 categories:categories,
@@ -256,5 +264,76 @@ router.get('/category/delete',function (req,res) {
         })
     })
 })
+
+/*
+ *内容首页
+ * */
+router.get('/content',function (req,res) {
+    var page=Number(req.query.page || 1);
+    var limit=5;
+    var pages=0;
+    Content.count().then(function (count) {
+        // console.log(count);
+        //计算总页数
+        pages=Math.ceil(count/limit);//向上取整
+        //取值不超过pages
+        page=Math.min(page,pages);
+        //取值不小于1
+        page=Math.max(page,1)
+        var skip=(page-1)*limit;
+
+        /**
+         * 1:升序
+         * -1:降序
+         * _id里面包含了一个创建的时间戳，所有越后面越大，我们要让后面的排在前面，就要采用降序排列
+         * */
+        Content.find().sort({_id:-1}).limit(limit).skip(skip).populate('category').then(function (contents) {
+
+            res.render('admin/content_index',{
+                userInfo:req.userInfo,
+                contents:contents,
+                count:count,
+                page:page,
+                pages:pages,
+                limit:limit
+
+            })
+        })
+    })
+})
+
+/*
+ *内容添加
+ * */
+router.get('/content/add',function (req,res) {
+    //读取所有分类信息
+    Category.find().then(function (categories) {
+        res.render('admin/content_add',{
+            userInfo:req.userInfo,
+            categories:categories
+        })
+    })
+
+
+})
+/*
+ *内容添加修改
+ * */
+router.post('/content/add',function (req,res) {
+    // console.log(req.body);
+    new Content({
+        category:req.body.category,
+        title:req.body.title,
+        description:req.body.description,
+        content:req.body.content
+    }).save().then(function (rs) {
+        res.render('admin/success',{
+            userInfo:req.userInfo,
+            message:'内容保存成功',
+            url:'/admin/content'
+        })
+    })
+})
+
 
 module.exports=router;
