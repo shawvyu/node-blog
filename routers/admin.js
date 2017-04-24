@@ -187,7 +187,7 @@ router.post('/category/edit',function (req,res) {
     var id=req.query.id || '';
     var name=req.body.name || '';
     // console.log(id);
-    console.log(name);
+    // console.log(name);
     //获取要修改的分类信息
     Category.findOne({
         _id:id
@@ -321,6 +321,20 @@ router.get('/content/add',function (req,res) {
  * */
 router.post('/content/add',function (req,res) {
     // console.log(req.body);
+    if(req.body.category==''){
+        res.render('admin/error',{
+            userInfo:req.userInfo,
+            message:'内容分类不能为空！！！！！'
+        });
+        return;
+    }
+    if(req.body.title==''){
+        res.render('admin/error',{
+            userInfo:req.userInfo,
+            message:'内容标题不能为空！！！！！'
+        });
+        return;
+    }
     new Content({
         category:req.body.category,
         title:req.body.title,
@@ -330,6 +344,85 @@ router.post('/content/add',function (req,res) {
         res.render('admin/success',{
             userInfo:req.userInfo,
             message:'内容保存成功',
+            url:'/admin/content'
+        })
+    })
+})
+/*
+* 内容修改
+* */
+router.get('/content/edit',function (req,res) {
+    var id=req.query.id || '';
+    var categories=[];
+    Category.find().sort({_id:1}).then(function (rs) {
+        categories=rs;
+        return Content.findOne({
+            _id:id
+        }).populate('category');
+    }).then(function (content) {
+        // console.log(content);
+        if(!content){
+            res.render('admin/error',{
+                userInfo:req.userInfo,
+                message:'指定内容不存在'
+            });
+            return Promise.reject();
+        }else{
+            res.render('admin/content_edit',{
+                userInfo:req.userInfo,
+                content:content,
+                categories:categories
+            })
+        }
+    })
+})
+/*
+ * 内容修改保存
+ * */
+router.post('/content/edit',function (req,res) {
+    var id=req.query.id || '';
+
+    if(req.body.category==''){
+        res.render('admin/error',{
+            userInfo:req.userInfo,
+            message:'内容分类不能为空！！！！！'
+        });
+        return;
+    }
+    if(req.body.title==''){
+        res.render('admin/error',{
+            userInfo:req.userInfo,
+            message:'内容标题不能为空！！！！！'
+        });
+        return;
+    }
+    Content.update({
+        _id:id
+    },{
+        category:req.body.category,
+        title:req.body.title,
+        description:req.body.description,
+        content:req.body.content
+    }).then(function () {
+        res.render('admin/success',{
+            userInfo:req.userInfo,
+            message:'内容修改成功',
+            url:'/admin/content/edit?id='+id
+        })
+    })
+
+})
+/*
+ * 内容删除
+ * */
+router.get('/content/delete',function (req,res) {
+    var id=req.query.id || '';
+    Content.remove({
+        _id:id
+    }).then(function () {
+        res.render('admin/success',{
+            userInfo:req.userInfo,
+            message:'删除成功',
             url:'/admin/content'
         })
     })
