@@ -51,10 +51,18 @@
                     </div>
                     <div class="collapse navbar-collapse" id="main-menu">
                         <ul class="menu">
+                            {% if category=='' %}
+                            <li class="nav-current" role="presentation"><a href="/">首页</a></li>
+                            {%else%}
+                            <li role="presentation"><a href="/">首页</a></li>
+                            {%endif%}
 
-					        <li class="nav-current" role="presentation"><a href="">首页</a></li>
-                            {% for category in categories %}
-					        <li  role="presentation"><a href="">{{category.name}}</a></li>
+                            {% for cate in categories %}
+                                {% if category==cate.id%}
+                                <li  class="nav-current" role="presentation"><a href="/?category={{cate.id}}">{{cate.name}}</a></li>
+                                {%else%}
+                                <li   role="presentation"><a href="/?category={{cate.id}}  ">{{cate.name}}</a></li>
+                                {%endif%}
                             {% endfor %}
 						</ul>   
                     </div>
@@ -75,9 +83,11 @@
 					    <div class="post-head">
 					        <h1 class="post-title"><a href="http://www.ghostchina.com/moving-to-node-js-v4-lts/">{{content.title}}</a></h1>
 					        <div class="post-meta">
-					            <span class="author">作者：<a href="http://www.ghostchina.com/author/wangsai/">{{content.user.username}}</a></span> &bull;
-					            <time class="post-date" datetime="2016年7月26日星期二上午9点54分" title="{{content.addTime|date('Y-m-d H:i:s',-8*60)}}">{{content.addTime|date('Y-m-d',-8*60)}}</time>
-					        </div>
+					            <span class="author">作者：<a href="">{{content.user.username}}</a></span> &bull;
+                                <span class="time">时间：<time class="post-date" datetime="2016年7月26日星期二上午9点54分" title="{{content.addTime|date('Y-m-d H:i:s',-8*60)}}">{{content.addTime|date('Y-m-d',-8*60)}}</time></span> &bull;
+                                <span class="views">阅读：<a href="">{{content.views}}</a></span> &bull;
+                                <span class="views">评论：<a href="">{{content.views}}</a></span>
+					         </div>
 					    </div>
 					    <div class="post-content">
 					        <p>{{content.description}}</p>
@@ -97,15 +107,14 @@
                     {%endfor%}
 					<nav class="pagination" role="navigation">
                         {% if page<=1%}
-
                         {%else%}
-                        <a class="newer-posts" href="/?page={{page-1}}"><i class="fa fa-angle-left"></i></a>
+                        <a class="newer-posts" href="/?category={{category}}&page={{page-1}}"><i class="fa fa-angle-left"></i></a>
                         {%endif%}
 					    <span class="page-number">第 {{page}} 页 &frasl; 共 {{pages}} 页</span>
                         {%if page>=pages%}
 
                         {%else%}
-                        <a class="older-posts" href="/?page={{page+1}}"><i  class="fa fa-angle-right"></i></a>
+                        <a class="older-posts" href="/?category={{category}}&page={{page+1}}"><i  class="fa fa-angle-right"></i></a>
                         {%endif%}
 					</nav>
             	</main>
