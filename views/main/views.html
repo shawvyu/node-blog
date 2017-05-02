@@ -51,14 +51,9 @@
                     </div>
                     <div class="collapse navbar-collapse" id="main-menu">
                         <ul class="menu">
-                            {% if category=='' %}
-                            <li class="nav-current" role="presentation"><a href="/">首页</a></li>
-                            {%else%}
                             <li role="presentation"><a href="/">首页</a></li>
-                            {%endif%}
-
                             {% for cate in categories %}
-                                {% if category==cate.id%}
+                                {% if content.category.id==cate.id%}
                                 <li  class="nav-current" role="presentation"><a href="/?category={{cate.id}}">{{cate.name}}</a></li>
                                 {%else%}
                                 <li   role="presentation"><a href="/?category={{cate.id}}  ">{{cate.name}}</a></li>
@@ -78,7 +73,6 @@
         <div class="container">
             <div class="row">
                 <main class="col-md-8 main-content">
-                    {% for content in contents%}
 					<article id=98 class="post">
 					    <div class="post-head">
 					        <h1 class="post-title"><a href="http://www.ghostchina.com/moving-to-node-js-v4-lts/">{{content.title}}</a></h1>
@@ -90,12 +84,8 @@
 					         </div>
 					    </div>
 					    <div class="post-content">
-					        <p>{{content.description}}</p>
+					        <p>{{content.content}}</p>
 					    </div>
-					    <div class="post-permalink">
-					        <a href="/views?contentid={{content.id}}" class="btn btn-default">阅读全文</a>
-					    </div>
-
 					    <footer class="post-footer clearfix">
 					        <div class="pull-left tag-list">
 					            <i class="fa fa-folder-open-o"></i>
@@ -104,19 +94,6 @@
 					        </div>
 					    </footer>
 					</article>
-                    {%endfor%}
-					<nav class="pagination" role="navigation">
-                        {% if page<=1%}
-                        {%else%}
-                        <a class="newer-posts" href="/?category={{category}}&page={{page-1}}"><i class="fa fa-angle-left"></i></a>
-                        {%endif%}
-					    <span class="page-number">第 {{page}} 页 &frasl; 共 {{pages}} 页</span>
-                        {%if page>=pages%}
-
-                        {%else%}
-                        <a class="older-posts" href="/?category={{category}}&page={{page+1}}"><i  class="fa fa-angle-right"></i></a>
-                        {%endif%}
-					</nav>
             	</main>
                 <aside class="col-md-4 sidebar">
                     {% if userInfo._id %}
